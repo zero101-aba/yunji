@@ -1,0 +1,137 @@
+<view class="list-page" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+  <view class="sticky-head">
+    <view class="head-row">
+      <view class="month-box">
+        <view class="month-arrow" catchtap="prevMonth">‹</view>
+        <text class="month-label">{{ymLabel}}</text>
+        <view class="month-arrow" catchtap="nextMonth">›</view>
+      </view>
+      <view class="tools">
+        <view class="tool" bindtap="goSearch">搜索</view>
+        <view class="tool {{hasFilter ? 'tool-on' : ''}}" bindtap="openFilter">筛选</view>
+        <view class="tool" bindtap="goCalendar">日历</view>
+      </view>
+    </view>
+
+    <view class="summary-card">
+      <view class="sum-top">
+        <text class="sum-cap">本月结余</text>
+        <text class="sum-balance num {{summary.balanceClass}}">{{summary.balanceText}}</text>
+      </view>
+      <view class="sum-cols">
+        <view class="sum-col">
+          <text class="sum-col-cap">收入</text>
+          <text class="sum-col-val num">{{summary.incomeText}}</text>
+        </view>
+        <view class="sum-col">
+          <text class="sum-col-cap">支出</text>
+          <text class="sum-col-val num">{{summary.expenseText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="filter-bar" wx:if="{{hasFilter}}">
+      <view class="filter-chips">
+        <view class="filter-chip" wx:for="{{filterChips}}" wx:key="key">
+          <text>{{item.label}}</text>
+          <text class="chip-x" data-key="{{item.key}}" catchtap="removeChip">×</text>
+        </view>
+        <view class="filter-clear" catchtap="resetFilter">清除</view>
+      </view>
+      <view class="filter-result">{{totalFiltered}} 笔 · {{filterResultText}}</view>
+    </view>
+  </view>
+
+  <view class="group" wx:for="{{groups}}" wx:key="date" wx:for-item="group">
+    <view class="group-head">
+      <view class="gh-left">
+        <text class="gh-date">{{group.dateText}}</text>
+        <text class="gh-week">{{group.week}}</text>
+        <text class="today-chip" wx:if="{{group.isToday}}">今天</text>
+      </view>
+      <view class="gh-right">
+        <text class="gh-sum" wx:if="{{group.expenseText}}">支 {{group.expenseText}}</text>
+        <text class="gh-sum" wx:if="{{group.incomeText}}">收 {{group.incomeText}}</text>
+      </view>
+    </view>
+    <view class="group-card">
+      <view class="bill-row" wx:for="{{group.items}}" wx:key="id" wx:for-item="bill" data-id="{{bill.id}}" bindtap="editBill" bindlongpress="deleteBill">
+        <view class="bill-icon" style="background: {{bill.tint}}">{{bill.icon}}</view>
+        <view class="bill-main">
+          <view class="bill-name">{{bill.name}}<text class="bill-attach" wx:if="{{bill.hasImages}}">📎</text></view>
+          <view class="bill-sub ellipsis">{{bill.sub}}</view>
+        </view>
+        <view class="bill-right">
+          <text class="bill-amount num {{bill.amountClass}}">{{bill.amountText}}</text>
+          <text class="bill-time">{{bill.time}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{monthEmpty}}">
+    <view class="empty-icon">🧾</view>
+    <view class="empty-title">这个月还没有记录</view>
+    <view class="empty-desc">随手记下第一笔，月底就知道钱花在哪了</view>
+    <view class="btn-primary empty-btn" bindtap="goRecord">记一笔</view>
+  </view>
+
+  <view class="empty" wx:elif="{{totalFiltered === 0}}">
+    <view class="empty-icon">🔍</view>
+    <view class="empty-title">没有符合条件的记录</view>
+    <view class="empty-desc">换个筛选条件试试</view>
+    <view class="btn-ghost empty-btn" catchtap="resetFilter">清除筛选</view>
+  </view>
+
+  <view class="list-foot" wx:if="{{groups.length}}">
+    <text>{{hasMore ? '上拉加载更多' : '— 已加载全部 —'}}</text>
+  </view>
+
+  <view class="fab" bindtap="goRecord">＋</view>
+
+  <!-- 筛选面板 -->
+  <view class="sheet-mask" wx:if="{{sheet === 'filter'}}" bindtap="closeSheet">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">筛选</text>
+        <view class="sheet-close" bindtap="closeSheet">×</view>
+      </view>
+
+      <view class="section-label">收支类型</view>
+      <view class="type-chips">
+        <view class="chip {{draftType === 'all' ? 'on' : ''}}" data-type="all" bindtap="onFilterType">全部</view>
+        <view class="chip {{draftType === 'expense' ? 'on' : ''}}" data-type="expense" bindtap="onFilterType">支出</view>
+        <view class="chip {{draftType === 'income' ? 'on' : ''}}" data-type="income" bindtap="onFilterType">收入</view>
+        <view class="chip {{draftType === 'transfer' ? 'on' : ''}}" data-type="transfer" bindtap="onFilterType">转账</view>
+      </view>
+
+      <view class="form-card">
+        <picker mode="selector" range="{{filterCatOptions}}" range-key="name" value="{{filterCatIndex}}" bindchange="onFilterCategory">
+          <view class="form-row">
+            <text class="form-label">分类</text>
+            <view class="form-value">{{filterCatName}}<text class="arrow-right">›</text></view>
+          </view>
+        </picker>
+        <picker mode="selector" range="{{filterAccountOptions}}" range-key="name" value="{{filterAccountIndex}}" bindchange="onFilterAccount">
+          <view class="form-row">
+            <text class="form-label">账户</text>
+            <view class="form-value">{{filterAccountName}}<text class="arrow-right">›</text></view>
+          </view>
+        </picker>
+        <view class="form-row">
+          <text class="form-label">最低金额</text>
+          <input class="form-input" type="digit" value="{{draftMin}}" placeholder="不限" placeholder-class="placeholder" bindinput="onFilterMin" />
+        </view>
+        <view class="form-row">
+          <text class="form-label">最高金额</text>
+          <input class="form-input" type="digit" value="{{draftMax}}" placeholder="不限" placeholder-class="placeholder" bindinput="onFilterMax" />
+        </view>
+      </view>
+
+      <view class="filter-actions">
+        <view class="btn-ghost flex1" bindtap="resetFilter">清除全部</view>
+        <view class="btn-primary flex1 apply-btn" bindtap="applyFilter">应用筛选</view>
+      </view>
+    </view>
+  </view>
+</view>

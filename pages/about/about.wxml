@@ -1,0 +1,91 @@
+<view class="about-page">
+  <view class="about-hero">
+    <view class="app-logo">🧾</view>
+    <view class="app-name">生活记账</view>
+    <view class="app-desc">打开就能记，不用注册，数据只在自己手机里</view>
+    <view class="version-chip">v{{version}}</view>
+    <text class="created" wx:if="{{createdText}}">{{createdText}}</text>
+  </view>
+
+  <view class="stat-grid">
+    <view class="stat-cell">
+      <text class="stat-val num">{{billCount}}</text>
+      <text class="stat-cap">账单笔数</text>
+    </view>
+    <view class="stat-cell">
+      <text class="stat-val num">{{monthCount}}</text>
+      <text class="stat-cap">记账月份</text>
+    </view>
+    <view class="stat-cell">
+      <text class="stat-val num">{{accountCount}}</text>
+      <text class="stat-cap">账户数</text>
+    </view>
+    <view class="stat-cell">
+      <text class="stat-val num small-num">{{storageText}}</text>
+      <text class="stat-cap">本地存储</text>
+    </view>
+  </view>
+
+  <view class="section-label">怎么用</view>
+  <view class="step-card">
+    <view class="step-row" wx:for="{{steps}}" wx:key="title">
+      <view class="step-icon">{{item.icon}}</view>
+      <view class="step-main">
+        <text class="step-title">{{item.title}}</text>
+        <text class="step-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-label">数据与隐私</view>
+  <view class="note-card">
+    <view class="note-row">
+      <text class="note-title">数据存在哪里</text>
+      <text class="note-desc">全部保存在当前手机的小程序本地存储中，按月分片存放。不登录、不联网、不上传，也没有服务端。</text>
+    </view>
+    <view class="note-row">
+      <text class="note-title">什么情况会丢数据</text>
+      <text class="note-desc">清理微信缓存、卸载小程序、卸载微信或更换手机都会导致本地数据丢失。请定期在「数据与备份」中导出 CSV 或生成备份内容并另存。</text>
+    </view>
+    <view class="note-row">
+      <text class="note-title">换机怎么迁移</text>
+      <text class="note-desc">在旧手机生成备份内容并复制保存，在新手机的「数据与备份」中粘贴恢复即可。</text>
+    </view>
+    <view class="note-row">
+      <text class="note-title">没有做什么</text>
+      <text class="note-desc">不做账号登录、云端同步、多人共享、发票 OCR、投资资产与 AA 分账。</text>
+    </view>
+    <view class="note-row">
+      <text class="note-title">记账提醒</text>
+      <text class="note-desc">提醒依赖微信订阅消息与后台定时服务，当前纯本地版本未启用，不影响记账与统计。</text>
+    </view>
+  </view>
+
+  <view class="section-label">其他</view>
+  <view class="menu-card">
+    <view class="menu-row" bindtap="goData">
+      <text class="menu-title">数据与备份</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-row" bindtap="showPrivacy">
+      <text class="menu-title">隐私说明</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-row" bindtap="checkUpdate">
+      <text class="menu-title">检查更新</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-row" bindtap="copyInfo">
+      <text class="menu-title">复制版本与数据信息</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="feedback-card">
+    <text class="fb-title">意见反馈</text>
+    <text class="fb-desc">遇到问题或想要新功能，点击上方「复制版本与数据信息」，把内容发给开发者即可。也可以直接在微信中搜索小程序反馈入口。</text>
+    <view class="btn-ghost fb-btn" bindtap="copyInfo">复制反馈信息</view>
+  </view>
+
+  <view class="footer">生活记账 · 免登录本地账本 · v{{version}}</view>
+</view>

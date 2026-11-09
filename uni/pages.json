@@ -1,0 +1,137 @@
+{
+  "pages": [
+    {
+      "path": "pages/record/record",
+      "style": {
+        "navigationBarTitleText": "星即"
+      }
+    },
+    {
+      "path": "pages/list/list",
+      "style": {
+        "navigationBarTitleText": "账单明细"
+      }
+    },
+    {
+      "path": "pages/stats/stats",
+      "style": {
+        "navigationBarTitleText": "统计"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/edit/edit",
+      "style": {
+        "navigationBarTitleText": "编辑记录"
+      }
+    },
+    {
+      "path": "pages/accounts/accounts",
+      "style": {
+        "navigationBarTitleText": "账户管理"
+      }
+    },
+    {
+      "path": "pages/account-edit/account-edit",
+      "style": {
+        "navigationBarTitleText": "账户"
+      }
+    },
+    {
+      "path": "pages/categories/categories",
+      "style": {
+        "navigationBarTitleText": "分类管理"
+      }
+    },
+    {
+      "path": "pages/category-edit/category-edit",
+      "style": {
+        "navigationBarTitleText": "分类"
+      }
+    },
+    {
+      "path": "pages/budget/budget",
+      "style": {
+        "navigationBarTitleText": "预算设置"
+      }
+    },
+    {
+      "path": "pages/data/data",
+      "style": {
+        "navigationBarTitleText": "数据与备份"
+      }
+    },
+    {
+      "path": "pages/templates/templates",
+      "style": {
+        "navigationBarTitleText": "快捷模板"
+      }
+    },
+    {
+      "path": "pages/calendar/calendar",
+      "style": {
+        "navigationBarTitleText": "日历"
+      }
+    },
+    {
+      "path": "pages/catstats/catstats",
+      "style": {
+        "navigationBarTitleText": "分类详情"
+      }
+    },
+    {
+      "path": "pages/search/search",
+      "style": {
+        "navigationBarTitleText": "搜索"
+      }
+    },
+    {
+      "path": "pages/share/share",
+      "style": {
+        "navigationBarTitleText": "账单分享"
+      }
+    },
+    {
+      "path": "pages/about/about",
+      "style": {
+        "navigationBarTitleText": "关于星即"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "星即",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F6F7F9",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#86909C",
+    "selectedColor": "#00B578",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/record/record",
+        "text": "记账"
+      },
+      {
+        "pagePath": "pages/list/list",
+        "text": "明细"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "统计"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
+  }
+}

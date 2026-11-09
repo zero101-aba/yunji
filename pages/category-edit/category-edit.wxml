@@ -1,0 +1,46 @@
+<view class="cedit-page">
+  <view class="preview">
+    <view class="preview-icon" style="background: {{color}}22; color: {{color}}">{{icon}}</view>
+    <view class="preview-name">{{name || '新分类'}}</view>
+    <view class="preview-type">{{typeLabel}}分类</view>
+  </view>
+
+  <view class="form-card">
+    <view class="form-row">
+      <text class="form-label">名称</text>
+      <input class="form-input" value="{{name}}" maxlength="8" placeholder="例如：早餐" placeholder-class="placeholder" bindinput="onName" />
+    </view>
+    <picker wx:if="{{canChooseParent}}" mode="selector" range="{{parentOptions}}" range-key="name" value="{{parentIndex}}" bindchange="onParent">
+      <view class="form-row">
+        <text class="form-label">上级分类</text>
+        <view class="form-value">{{parentName}}<text class="arrow-right">›</text></view>
+      </view>
+    </picker>
+    <view class="form-row">
+      <text class="form-label">在记账页隐藏</text>
+      <view class="toggle {{hidden ? 'on' : ''}}" catchtap="toggleHidden">
+        <view class="toggle-dot"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-label">图标</view>
+  <view class="icon-grid">
+    <view class="icon-cell {{icon === item ? 'on' : ''}}" wx:for="{{icons}}" wx:key="*this" data-icon="{{item}}" bindtap="selectIcon">{{item}}</view>
+  </view>
+
+  <block wx:if="{{!parentId}}">
+    <view class="section-label">颜色</view>
+    <view class="color-grid">
+      <view class="color-cell {{color === item ? 'on' : ''}}" wx:for="{{colors}}" wx:key="*this" data-color="{{item}}" bindtap="selectColor">
+        <view class="color-dot" style="background: {{item}}"></view>
+      </view>
+    </view>
+  </block>
+  <view class="color-hint" wx:else>二级分类会沿用上级分类的颜色，统计时合并计算。</view>
+
+  <view class="actions safe-bottom">
+    <view class="btn-primary" bindtap="save">保存</view>
+    <view class="btn-danger remove-btn" wx:if="{{isEdit}}" bindtap="remove">删除分类</view>
+  </view>
+</view>

@@ -1,0 +1,125 @@
+.acc-edit-page {
+  min-height: 100vh;
+  padding: 24rpx 28rpx 60rpx;
+  background: #F7F5F0;
+}
+
+.avatar-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 0 12rpx;
+}
+
+.big-icon {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 32rpx;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  box-shadow: 0 10rpx 26rpx rgba(62, 52, 38, 0.08);
+}
+
+.preview-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-top: 16rpx;
+}
+
+.preview-balance {
+  font-size: 23rpx;
+  color: #8C857B;
+  margin-top: 4rpx;
+}
+
+.type-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.type-cell {
+  width: calc(33.33% - 12rpx);
+  margin: 6rpx;
+  background: #FFFFFF;
+  border: 1rpx solid #EDE7DD;
+  border-radius: 18rpx;
+  padding: 18rpx 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.type-cell.on {
+  background: #F2F8F5;
+  border-color: rgba(47, 111, 94, 0.45);
+}
+
+.type-icon {
+  font-size: 34rpx;
+}
+
+.type-label {
+  font-size: 22rpx;
+  color: #5A544B;
+  margin-top: 6rpx;
+}
+
+.type-cell.on .type-label {
+  color: #2F6F5E;
+  font-weight: 600;
+}
+
+.form-card {
+  background: #FFFFFF;
+  border-radius: 26rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 24rpx rgba(62, 52, 38, 0.04);
+}
+
+.hint-card {
+  margin-top: 18rpx;
+  padding: 20rpx 24rpx;
+  background: #FFF8ED;
+  border: 1rpx solid #F1E1C4;
+  border-radius: 16rpx;
+  color: #8A6A2E;
+  font-size: 22rpx;
+  line-height: 1.7;
+}
+
+.icon-grid {
+  display: flex;
+  flex-wrap: wrap;
+  background: #FFFFFF;
+  border-radius: 26rpx;
+  padding: 14rpx;
+  box-shadow: 0 8rpx 24rpx rgba(62, 52, 38, 0.04);
+}
+
+.icon-cell {
+  width: calc(16.66% - 12rpx);
+  margin: 6rpx;
+  aspect-ratio: 1;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  border: 1rpx solid transparent;
+}
+
+.icon-cell.on {
+  background: #F2F8F5;
+  border-color: rgba(47, 111, 94, 0.4);
+}
+
+.actions {
+  margin-top: 40rpx;
+}
+
+.remove-btn {
+  margin-top: 20rpx;
+}

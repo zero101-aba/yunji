@@ -1,0 +1,258 @@
+<view class="rec">
+  <!-- 预算提示 -->
+  <view class="alert-banner" wx:if="{{alertText}}">{{alertText}}</view>
+
+  <view class="rec-main">
+    <view class="budget-mini" wx:if="{{budget.hasBudget}}" bindtap="goBudget">
+      <view class="row between">
+        <text class="bm-label">本月预算</text>
+        <text class="bm-value {{budget.over ? 'over' : ''}}">{{budget.over ? '已超支' : '剩余 ' + budget.remainText}}</text>
+      </view>
+      <view class="bm-bar">
+        <view class="bm-fill {{budget.over ? 'over' : ''}}" style="width: {{budget.barWidth}}%"></view>
+      </view>
+      <view class="row between bm-foot">
+        <text>已用 {{budget.usedText}}</text>
+        <text>{{budget.totalText}}</text>
+      </view>
+    </view>
+
+    <!-- 收支类型 -->
+    <view class="type-seg">
+      <view class="type-item {{type === 'expense' ? 'on expense-text' : ''}}" data-type="expense" bindtap="onType">支出</view>
+      <view class="type-item {{type === 'income' ? 'on income-text' : ''}}" data-type="income" bindtap="onType">收入</view>
+      <view class="type-item {{type === 'transfer' ? 'on' : ''}}" data-type="transfer" bindtap="onType">转账</view>
+    </view>
+
+    <!-- 金额 -->
+    <view class="amount-block">
+      <view class="amount-line">
+        <text class="currency">¥</text>
+        <text class="amount-text num {{expr ? '' : 'ph'}}" style="font-size: {{amountFont}}rpx">{{expr || '0.00'}}</text>
+      </view>
+      <view class="amount-meta">
+        <text wx:if="{{type === 'transfer'}}">账户转账 · 不计入收支</text>
+        <text wx:elif="{{selectedLabel}}">{{selectedLabel}}</text>
+        <text wx:else class="ph-text">请选择分类</text>
+        <text wx:if="{{images.length}}" class="meta-extra"> · {{images.length}} 张凭证</text>
+      </view>
+    </view>
+
+    <!-- 快捷模板 -->
+    <view class="tpl-wrap" wx:if="{{templates.length}}">
+      <scroll-view class="tpl-scroll" scroll-x enable-flex>
+        <view class="tpl-chip" wx:for="{{templates}}" wx:key="id" data-id="{{item.id}}" bindtap="applyTemplate">
+          <text class="tpl-name">{{item.name}}</text>
+          <text class="tpl-amt num">{{item.icon}}{{item.amountText}}</text>
+        </view>
+        <view class="tpl-manage" bindtap="openTemplates">管理</view>
+      </scroll-view>
+    </view>
+
+    <!-- 分类 / 转账 -->
+    <scroll-view wx:if="{{type !== 'transfer'}}" class="cat-scroll" scroll-y>
+      <view class="cat-grid">
+        <view wx:for="{{categories}}" wx:key="id" class="cat-item {{item.active ? 'active' : ''}}" data-id="{{item.id}}" bindtap="onCatTap">
+          <view class="cat-icon" style="background: {{item.tint}}; color: {{item.color}}">{{item.icon}}</view>
+          <text class="cat-name {{item.active ? 'active' : ''}}">{{item.name}}</text>
+          <view class="cat-dot" wx:if="{{item.hasChildren}}"></view>
+        </view>
+      </view>
+      <view class="cat-empty" wx:if="{{categories.length === 0}}">暂无可用分类，请到「我的 - 分类管理」添加</view>
+    </scroll-view>
+
+    <view wx:else class="transfer-panel">
+      <view class="transfer-card">
+        <view class="transfer-row" data-target="account" bindtap="openAccount">
+          <view class="tr-cap">转出</view>
+          <view class="tr-name">{{accountLabel}}</view>
+          <view class="tr-arrow">选择 ›</view>
+        </view>
+        <view class="tr-line">
+          <view class="tr-line-dot"></view>
+          <text class="tr-arrow-icon">↓</text>
+        </view>
+        <view class="transfer-row" data-target="toAccount" bindtap="openAccount">
+          <view class="tr-cap">转入</view>
+          <view class="tr-name">{{toAccountLabel}}</view>
+          <view class="tr-arrow">选择 ›</view>
+        </view>
+      </view>
+      <view class="transfer-tip">转账只调整两个账户的余额，不会计入收入与支出统计</view>
+    </view>
+
+    <!-- 元信息 -->
+    <view class="meta-bar">
+      <view class="meta-item" data-target="account" bindtap="openAccount">
+        <text class="meta-k">账户</text>
+        <text class="meta-v ellipsis">{{accountLabel}}</text>
+      </view>
+      <view class="meta-sp"></view>
+      <view class="meta-item" bindtap="openDate">
+        <text class="meta-k">日期</text>
+        <text class="meta-v ellipsis">{{dateShort}}</text>
+      </view>
+      <view class="meta-sp"></view>
+      <view class="meta-item" bindtap="openNote">
+        <text class="meta-k">备注</text>
+        <text class="meta-v ellipsis">{{noteShort || '添加'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 键盘 -->
+  <view class="keypad">
+    <view class="key" data-key="7" bindtap="onKey">7</view>
+    <view class="key" data-key="8" bindtap="onKey">8</view>
+    <view class="key" data-key="9" bindtap="onKey">9</view>
+    <view class="key fn" data-key="del" bindtap="onKey">⌫</view>
+
+    <view class="key" data-key="4" bindtap="onKey">4</view>
+    <view class="key" data-key="5" bindtap="onKey">5</view>
+    <view class="key" data-key="6" bindtap="onKey">6</view>
+    <view class="key op" data-key="+" bindtap="onKey">+</view>
+
+    <view class="key" data-key="1" bindtap="onKey">1</view>
+    <view class="key" data-key="2" bindtap="onKey">2</view>
+    <view class="key" data-key="3" bindtap="onKey">3</view>
+    <view class="key op" data-key="-" bindtap="onKey">−</view>
+
+    <view class="key" data-key="." bindtap="onKey">.</view>
+    <view class="key" data-key="0" bindtap="onKey">0</view>
+    <view class="key eq" data-key="eq" bindtap="onKey">=</view>
+    <view class="key save" bindtap="onSave">保存</view>
+  </view>
+
+  <!-- 撤销 -->
+  <view class="undo-bar" wx:if="{{showUndo}}">
+    <text>已保存这笔账</text>
+    <view class="undo-btn" catchtap="undoLast">撤销</view>
+  </view>
+
+  <!-- 引导 -->
+  <view class="guide-mask" wx:if="{{showGuide}}">
+    <view class="guide-card">
+      <view class="guide-logo">🧾</view>
+      <view class="guide-title">欢迎使用生活记账</view>
+      <view class="guide-desc">打开就能记，不用注册，数据只留在你自己手机里。</view>
+      <view class="guide-list">
+        <view class="guide-row">
+          <view class="guide-idx">1</view>
+          <view>
+            <view class="guide-row-t">10 秒记一笔</view>
+            <view class="guide-row-d">选分类、敲金额，点保存即可。</view>
+          </view>
+        </view>
+        <view class="guide-row">
+          <view class="guide-idx">2</view>
+          <view>
+            <view class="guide-row-t">数据仅存本机</view>
+            <view class="guide-row-d">不联网、不采集信息，换机需手动备份。</view>
+          </view>
+        </view>
+        <view class="guide-row">
+          <view class="guide-idx">3</view>
+          <view>
+            <view class="guide-row-t">定期备份更安心</view>
+            <view class="guide-row-d">清理微信缓存或卸载小程序会导致数据丢失。</view>
+          </view>
+        </view>
+      </view>
+      <view class="btn-primary guide-btn" bindtap="closeGuide">开始记账</view>
+    </view>
+  </view>
+
+  <!-- 账户选择 -->
+  <view class="sheet-mask" wx:if="{{sheet === 'account'}}" bindtap="closeSheet">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">{{accountTarget === 'toAccount' ? '选择转入账户' : '选择账户'}}</text>
+        <view class="sheet-close" bindtap="closeSheet">×</view>
+      </view>
+      <scroll-view scroll-y class="account-scroll">
+        <view class="account-item {{item.id === sheetAccountActive ? 'on' : ''}}" wx:for="{{accounts}}" wx:key="id" data-id="{{item.id}}" bindtap="selectAccount">
+          <view class="account-icon">{{item.icon}}</view>
+          <view class="flex1">
+            <view class="account-name">{{item.name}}</view>
+            <view class="account-balance">余额 {{item.balanceText}}</view>
+          </view>
+          <view class="check-mark" wx:if="{{item.id === sheetAccountActive}}">✓</view>
+        </view>
+      </scroll-view>
+      <view class="btn-ghost" bindtap="goAccounts">管理账户</view>
+    </view>
+  </view>
+
+  <!-- 日期选择 -->
+  <view class="sheet-mask" wx:if="{{sheet === 'date'}}" bindtap="closeSheet">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">选择日期</text>
+        <view class="sheet-close" bindtap="closeSheet">×</view>
+      </view>
+      <view class="quick-dates">
+        <view class="quick-date {{item.date === dateStr ? 'on' : ''}}" wx:for="{{quickDates}}" wx:key="offset" data-date="{{item.date}}" bindtap="pickQuickDate">
+          <text class="qd-label">{{item.label}}</text>
+          <text class="qd-date">{{item.date}}</text>
+        </view>
+      </view>
+      <view class="form-card">
+        <picker mode="date" value="{{dateStr}}" bindchange="onDateChange">
+          <view class="form-row">
+            <text class="form-label">自定义日期</text>
+            <view class="form-value">{{dateStr}}<text class="arrow-right">›</text></view>
+          </view>
+        </picker>
+        <picker mode="time" value="{{time}}" bindchange="onTimeChange">
+          <view class="form-row">
+            <text class="form-label">时间</text>
+            <view class="form-value">{{time}}<text class="arrow-right">›</text></view>
+          </view>
+        </picker>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注与凭证 -->
+  <view class="sheet-mask" wx:if="{{sheet === 'note'}}" bindtap="closeSheet">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">备注与凭证</text>
+        <view class="sheet-close" bindtap="closeSheet">×</view>
+      </view>
+      <view class="note-box">
+        <textarea class="note-input" value="{{note}}" maxlength="50" placeholder="写点什么，方便以后搜索（选填）" placeholder-class="placeholder" bindinput="onNoteInput"></textarea>
+        <view class="note-count">{{note.length}}/50</view>
+      </view>
+      <view class="section-label">图片凭证（最多 3 张，会压缩后保存在本机）</view>
+      <view class="img-row">
+        <view class="img-item" wx:for="{{images}}" wx:key="*this">
+          <image class="img-thumb" src="{{item}}" mode="aspectFill" data-src="{{item}}" bindtap="previewImage"></image>
+          <view class="img-del" data-index="{{index}}" catchtap="removeImage">×</view>
+        </view>
+        <view class="img-add" wx:if="{{images.length < 3}}" bindtap="chooseImage">
+          <text class="img-add-plus">＋</text>
+          <text class="img-add-text">添加</text>
+        </view>
+      </view>
+      <view class="btn-primary note-done" bindtap="closeNote">完成</view>
+    </view>
+  </view>
+
+  <!-- 二级分类 -->
+  <view class="sheet-mask" wx:if="{{subVisible}}" bindtap="closeSub">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">{{subParent.name}}</text>
+        <view class="sheet-close" bindtap="closeSub">×</view>
+      </view>
+      <view class="sub-only" bindtap="pickParentOnly">仅记一级分类 · {{subParent.name}}</view>
+      <view class="sub-grid">
+        <view class="sub-item" wx:for="{{subCategories}}" wx:key="id" data-id="{{item.id}}" bindtap="pickSubCategory">
+          <text class="sub-icon">{{item.icon}}</text>
+          <text class="sub-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

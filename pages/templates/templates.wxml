@@ -1,0 +1,89 @@
+<view class="tpl-page">
+  <view class="page-title">
+    <view class="title">快捷模板</view>
+    <view class="sub">把常记的一笔存成模板，记账时一键带出金额与分类</view>
+  </view>
+
+  <view class="tpl-card" wx:if="{{list.length}}">
+    <view class="tpl-row" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="editTemplate" bindlongpress="removeTemplate">
+      <view class="tpl-icon {{item.type}}">{{item.icon}}</view>
+      <view class="tpl-main">
+        <view class="tpl-name-line">
+          <text class="tpl-name ellipsis">{{item.name}}</text>
+          <text class="tpl-type {{item.type}}">{{item.typeLabel}}</text>
+        </view>
+        <text class="tpl-sub ellipsis">{{item.categoryText}} · {{item.accountText}}</text>
+      </view>
+      <view class="tpl-right">
+        <text class="tpl-amount num {{item.type}}">{{item.amountText}}</text>
+        <text class="tpl-hint">长按删除</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:else>
+    <view class="empty-icon">⚡</view>
+    <view class="empty-title">还没有快捷键模板</view>
+    <view class="empty-desc">把每天都会记的一笔存成模板，下次记账点一下就填好了</view>
+  </view>
+
+  <view class="btn-primary add-btn" bindtap="openForm">＋ 新建模板</view>
+
+  <view class="tip-card">
+    <text class="tip-title">模板能做什么</text>
+    <text class="tip-desc">模板只保存金额、分类、账户和备注，不会直接产生账单。在记账页顶部的模板条点一下，即可自动填好这笔记录，再按「保存」完成记账。</text>
+  </view>
+
+  <view class="sheet-mask" wx:if="{{showForm}}" bindtap="closeForm">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">{{formId ? '编辑模板' : '新建模板'}}</text>
+        <view class="sheet-close" bindtap="closeForm">×</view>
+      </view>
+
+      <view class="form-card">
+        <view class="form-row">
+          <text class="form-label">模板名称</text>
+          <input class="form-input" value="{{formName}}" maxlength="12" placeholder="如：午餐、通勤" placeholder-class="placeholder" bindinput="onFormName" />
+        </view>
+        <view class="form-row">
+          <text class="form-label">收支类型</text>
+          <view class="form-seg">
+            <view class="fs-item {{formType === 'expense' ? 'on expense' : ''}}" data-type="expense" bindtap="selectFormType">支出</view>
+            <view class="fs-item {{formType === 'income' ? 'on income' : ''}}" data-type="income" bindtap="selectFormType">收入</view>
+            <view class="fs-item {{formType === 'transfer' ? 'on transfer' : ''}}" data-type="transfer" bindtap="selectFormType">转账</view>
+          </view>
+        </view>
+        <view class="form-row">
+          <text class="form-label">金额（元）</text>
+          <input class="form-input num" type="digit" value="{{formAmount}}" placeholder="0.00" placeholder-class="placeholder" bindinput="onFormAmount" />
+        </view>
+        <picker wx:if="{{formType !== 'transfer'}}" mode="selector" range="{{categoryOptions}}" range-key="name" value="{{categoryIndex}}" bindchange="onFormCategory">
+          <view class="form-row">
+            <text class="form-label">分类</text>
+            <view class="form-value">{{categoryName}}<text class="arrow-right">›</text></view>
+          </view>
+        </picker>
+        <view class="form-row" wx:else>
+          <text class="form-label">分类</text>
+          <view class="form-value muted">转账无需分类</view>
+        </view>
+        <picker mode="selector" range="{{accountOptions}}" range-key="name" value="{{accountIndex}}" bindchange="onFormAccount">
+          <view class="form-row">
+            <text class="form-label">账户</text>
+            <view class="form-value">{{accountName}}<text class="arrow-right">›</text></view>
+          </view>
+        </picker>
+        <view class="form-row">
+          <text class="form-label">备注</text>
+          <input class="form-input" value="{{formNote}}" maxlength="50" placeholder="选填" placeholder-class="placeholder" bindinput="onFormNote" />
+        </view>
+      </view>
+
+      <view class="sheet-actions">
+        <view class="btn-danger flex1" wx:if="{{formId}}" data-id="{{formId}}" bindtap="removeTemplate">删除</view>
+        <view class="btn-primary flex1" bindtap="saveForm">保存模板</view>
+      </view>
+    </view>
+  </view>
+</view>

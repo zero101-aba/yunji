@@ -1,0 +1,60 @@
+<view class="search-page">
+  <view class="search-head">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        value="{{keyword}}"
+        placeholder="搜索备注关键词，如 午饭、打车"
+        placeholder-class="placeholder"
+        confirm-type="search"
+        focus="{{true}}"
+        bindinput="onInput"
+        bindconfirm="onConfirm"
+      />
+      <view class="clear-btn" wx:if="{{keyword}}" bindtap="clearKeyword">×</view>
+    </view>
+    <view class="search-meta" wx:if="{{hasSearched}}">
+      <text class="sm-count">找到 {{totalMatched}} 笔</text>
+      <view class="sm-sums">
+        <text class="sm-sum expense" wx:if="{{expenseText}}">支出 {{expenseText}}</text>
+        <text class="sm-sum income" wx:if="{{incomeText}}">收入 {{incomeText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="result-card" wx:if="{{results.length}}">
+    <view class="result-row" wx:for="{{results}}" wx:key="id" data-id="{{item.id}}" bindtap="editBill">
+      <view class="r-icon" style="background: {{item.tint}}">{{item.icon}}</view>
+      <view class="r-main">
+        <view class="r-name-line">
+          <text class="r-name ellipsis">{{item.name}}</text>
+          <text class="r-date">{{item.dateText}}</text>
+        </view>
+        <view class="r-note ellipsis">
+          <text wx:for="{{item.noteParts}}" wx:for-item="part" wx:key="index" class="{{part.hit ? 'hit' : ''}}">{{part.t}}</text>
+          <text class="r-attach" wx:if="{{item.hasImages}}">📎</text>
+        </view>
+      </view>
+      <view class="r-right">
+        <text class="r-amount num {{item.amountClass}}">{{item.amountText}}</text>
+        <text class="r-time">{{item.time}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="limit-tip" wx:if="{{limitTip}}">{{limitTip}}</view>
+
+  <view class="empty" wx:if="{{hasSearched && results.length === 0}}">
+    <view class="empty-icon">🔍</view>
+    <view class="empty-title">没有找到相关备注</view>
+    <view class="empty-desc">备注里没有「{{keyword}}」，换个关键词，或去记一笔带备注的账</view>
+    <view class="btn-ghost empty-btn" bindtap="goRecord">去记一笔</view>
+  </view>
+
+  <view class="empty" wx:if="{{!hasSearched}}">
+    <view class="empty-icon">🔍</view>
+    <view class="empty-title">搜索备注</view>
+    <view class="empty-desc">支持搜索所有月份的账单备注，试试「午饭」「打车」「超市」</view>
+  </view>
+</view>

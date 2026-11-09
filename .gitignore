@@ -1,0 +1,41 @@
+# ---------- 依赖 ----------
+node_modules/
+package-lock.json.bak
+
+# ---------- uni-app / HBuilderX 编译产物 ----------
+uni/unpackage/
+uni/.hbuilderx/
+.hbuilderx/
+unpackage/
+dist/
+
+# ---------- 打包产物 ----------
+*.apk
+*.aab
+*.wgt
+*.ipa
+*.ipa.zip
+*.exe
+release/
+
+# ---------- 日志与临时文件 ----------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tmp
+*.temp
+
+# ---------- 编辑器 / 系统 ----------
+.idea/
+.vscode/
+*.suo
+*.user
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- 本地私有配置 ----------
+project.private.config.json
+*.local
+.env.local

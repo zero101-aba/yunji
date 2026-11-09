@@ -1,0 +1,38 @@
+<view class="accounts-page">
+  <view class="assets-card">
+    <text class="assets-cap">账户总资产（不含信用卡）</text>
+    <text class="assets-val num">{{totalAssetsText}}</text>
+    <text class="assets-note">账户余额会随每笔收支自动更新</text>
+  </view>
+
+  <view class="section-label">我的账户</view>
+  <view class="account-list">
+    <view class="account-card" wx:for="{{accounts}}" wx:key="id" data-id="{{item.id}}" bindtap="editAccount">
+      <view class="ac-icon">{{item.icon}}</view>
+      <view class="ac-main">
+        <view class="ac-name-row">
+          <text class="ac-name">{{item.name}}</text>
+          <text class="ac-type">{{item.typeLabel}}</text>
+        </view>
+        <text class="ac-extra" wx:if="{{item.extra}}">{{item.extra}}</text>
+        <text class="ac-extra" wx:else>当前余额</text>
+      </view>
+      <view class="ac-right">
+        <text class="ac-amount num {{item.negative ? 'neg' : ''}}">{{item.amountText}}</text>
+        <text class="ac-arrow">›</text>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{accounts.length === 0}}">
+      <view class="empty-icon">👛</view>
+      <view class="empty-title">还没有账户</view>
+      <view class="empty-desc">添加一个账户后就可以开始记账了</view>
+    </view>
+  </view>
+
+  <view class="btn-primary add-btn" bindtap="addAccount">＋ 添加账户</view>
+
+  <view class="tip-card">
+    <text class="tip-title">关于信用卡</text>
+    <text class="tip-desc">信用卡的消费会累计为已用额度。可用额度 = 额度 − 已用额度。信用卡不计入总资产。</text>
+  </view>
+</view>

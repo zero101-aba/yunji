@@ -1,0 +1,51 @@
+<view class="data-page">
+  <view class="storage-card">
+    <view class="row between">
+      <text class="storage-title">本地存储占用</text>
+      <text class="storage-val">{{storageText}}</text>
+    </view>
+    <view class="storage-track">
+      <view class="storage-fill {{storageWarn ? 'warn' : ''}}" style="width: {{storagePercent}}%"></view>
+    </view>
+    <view class="storage-meta">共 {{billCount}} 笔账单 · {{monthCount}} 个月份</view>
+    <view class="storage-warn" wx:if="{{storageWarn}}">存储接近上限，建议导出备份后清理不常用的图片凭证。</view>
+  </view>
+
+  <view class="section-label">导出账单</view>
+  <view class="card">
+    <picker mode="selector" range="{{exportOptions}}" range-key="name" value="{{exportIndex}}" bindchange="onExportScope">
+      <view class="form-row">
+        <text class="form-label">导出范围</text>
+        <view class="form-value">{{exportName}}<text class="arrow-right">›</text></view>
+      </view>
+    </picker>
+    <view class="card-desc">导出为 CSV，包含日期、时间、类型、分类、账户、金额与备注，可直接用 Excel 打开。</view>
+    <view class="btn-primary export-btn" bindtap="exportCsv">导出 CSV 文件</view>
+  </view>
+
+  <view class="section-label">备份与恢复</view>
+  <view class="card">
+    <view class="card-desc">备份包含账户、分类、预算、模板和全部账单。建议每月备份一次并保存到微信文件或电脑。</view>
+    <view class="backup-row">
+      <view class="btn-primary flex1" bindtap="generateBackup">生成并复制备份</view>
+      <view class="btn-ghost backup-file-btn" bindtap="saveBackupFile">存为文件</view>
+    </view>
+    <view class="backup-info" wx:if="{{backupInfo}}">{{backupInfo}}</view>
+    <view class="divider backup-divider"></view>
+    <view class="restore-label">粘贴备份内容恢复</view>
+    <textarea class="restore-input" value="{{restoreText}}" placeholder="在此粘贴之前复制的备份内容（JSON）" placeholder-class="placeholder" bindinput="onRestoreInput" maxlength="-1"></textarea>
+    <view class="btn-ghost restore-btn" bindtap="restoreBackup">恢复备份</view>
+  </view>
+
+  <view class="section-label">危险操作</view>
+  <view class="danger-card">
+    <view class="danger-title">清空全部账单</view>
+    <view class="danger-desc">删除所有账单并把账户余额重置为初始余额，分类和账户设置保留。此操作不可撤销。</view>
+    <view class="btn-danger" bindtap="clearBills">清空账单</view>
+  </view>
+
+  <view class="foot-tip">
+    <text class="foot-tip-strong">为什么一定要备份？</text>
+    <text class="foot-tip-text">数据只存在当前微信的小程序本地存储中。清理微信缓存、卸载小程序或更换手机都会导致数据永久丢失，定期备份可以避免损失。</text>
+  </view>
+</view>

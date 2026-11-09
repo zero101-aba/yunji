@@ -1,0 +1,62 @@
+{
+  "name": "星即",
+  "appid": "",
+  "description": "打开就能记、不用注册、数据只存在本机的记账工具",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "uniStatistics": {
+    "enable": false
+  },
+  "app-plus": {
+    "usingComponents": true,
+    "nvueStyleCompiler": "uni-app",
+    "compilerVersion": 3,
+    "splashscreen": {
+      "alwaysShowBeforeRender": true,
+      "waiting": true,
+      "autoclose": true,
+      "delay": 0
+    },
+    "modules": {},
+    "distribute": {
+      "android": {
+        "permissions": [
+          "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+          "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\"/>",
+          "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>"
+        ]
+      },
+      "ios": {},
+      "sdkConfigs": {},
+      "icons": {
+        "android": {
+          "hdpi": "static/icons/icon-72.png",
+          "xhdpi": "static/icons/icon-96.png",
+          "xxhdpi": "static/icons/icon-144.png",
+          "xxxhdpi": "static/icons/icon-192.png"
+        },
+        "ios": {}
+      }
+    }
+  },
+  "quickapp": {},
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false,
+      "es6": true,
+      "minified": true
+    },
+    "usingComponents": true
+  },
+  "mp-alipay": {
+    "usingComponents": true
+  },
+  "h5": {
+    "title": "星即",
+    "router": {
+      "mode": "hash"
+    }
+  }
+}

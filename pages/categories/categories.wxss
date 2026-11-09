@@ -1,0 +1,144 @@
+.cat-page {
+  min-height: 100vh;
+  padding: 24rpx 28rpx 70rpx;
+  background: #F7F5F0;
+}
+
+.type-seg-wrap {
+  margin-bottom: 18rpx;
+}
+
+.list-intro {
+  font-size: 22rpx;
+  color: #9C9489;
+  line-height: 1.6;
+  padding: 0 4rpx 16rpx;
+}
+
+.cat-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 0 22rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 8rpx 24rpx rgba(62, 52, 38, 0.04);
+}
+
+.top-row {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 0;
+}
+
+.top-row.dim {
+  opacity: 0.55;
+}
+
+.cat-icon {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  flex-shrink: 0;
+}
+
+.cat-main {
+  flex: 1;
+  min-width: 0;
+  margin-left: 18rpx;
+}
+
+.cat-name-line {
+  display: flex;
+  align-items: center;
+}
+
+.cat-name {
+  font-size: 29rpx;
+  font-weight: 600;
+  color: #2E2A25;
+}
+
+.cat-sub {
+  display: block;
+  font-size: 21rpx;
+  color: #A59D91;
+  margin-top: 3rpx;
+}
+
+.hidden-tag {
+  font-size: 18rpx;
+  color: #9C9489;
+  background: #F2EDE5;
+  border-radius: 6rpx;
+  padding: 2rpx 8rpx;
+  margin-left: 10rpx;
+}
+
+.hidden-tag.small {
+  margin-left: 8rpx;
+}
+
+.cat-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.mini-act {
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  border-radius: 10rpx;
+  background: #F4F0E8;
+  color: #6E675D;
+  font-size: 24rpx;
+  margin-left: 8rpx;
+}
+
+.mini-act.text {
+  width: auto;
+  padding: 0 12rpx;
+  font-size: 20rpx;
+}
+
+.child-list {
+  border-top: 1rpx solid #F3EEE6;
+  padding-left: 20rpx;
+}
+
+.child-row {
+  display: flex;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #F7F3EC;
+}
+
+.child-row.dim {
+  opacity: 0.55;
+}
+
+.child-icon {
+  font-size: 28rpx;
+  width: 44rpx;
+}
+
+.child-name {
+  flex: 1;
+  font-size: 25rpx;
+  color: #5A544B;
+}
+
+.add-child {
+  padding: 18rpx 0 20rpx;
+  font-size: 22rpx;
+  color: #2F6F5E;
+  text-align: center;
+}
+
+.add-btn {
+  margin-top: 24rpx;
+}

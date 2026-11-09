@@ -1,0 +1,81 @@
+<view class="cal-page">
+  <view class="cal-head">
+    <view class="nav">
+      <view class="nav-arrow" data-dir="-1" bindtap="shift">‹</view>
+      <text class="nav-label">{{ymLabel}}</text>
+      <view class="nav-arrow" data-dir="1" bindtap="shift">›</view>
+    </view>
+    <view class="today-btn" wx:if="{{ym !== currentYm}}" bindtap="goToday">回到本月</view>
+  </view>
+
+  <view class="month-strip">
+    <view class="ms-item">
+      <text class="ms-cap">本月支出</text>
+      <text class="ms-val num expense">{{monthExpenseText}}</text>
+    </view>
+    <view class="ms-item">
+      <text class="ms-cap">本月收入</text>
+      <text class="ms-val num income">{{monthIncomeText}}</text>
+    </view>
+    <view class="ms-item small-item">
+      <text class="ms-cap">记账</text>
+      <text class="ms-val num">{{monthCount}} 笔</text>
+    </view>
+  </view>
+
+  <view class="cal-card">
+    <view class="week-row">
+      <text class="week-cell" wx:for="{{weekLabels}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="days-grid">
+      <view
+        class="day-cell {{item.day === 0 ? 'blank' : ''}} {{item.isSelected ? 'selected' : ''}} {{item.isToday ? 'today' : ''}}"
+        wx:for="{{cells}}"
+        wx:key="key"
+        data-date="{{item.date}}"
+        bindtap="selectDay"
+      >
+        <text class="day-num">{{item.day > 0 ? item.day : ''}}</text>
+        <view class="dot {{item.dotClass}}" wx:if="{{item.hasBill}}"></view>
+      </view>
+    </view>
+    <view class="legend">
+      <view class="lg-item"><view class="dot expense"></view><text>有支出</text></view>
+      <view class="lg-item"><view class="dot income"></view><text>有收入</text></view>
+      <text class="lg-days">本月记账 {{monthDays}} 天</text>
+    </view>
+  </view>
+
+  <view class="day-panel">
+    <view class="dp-head">
+      <view class="dp-date-box">
+        <text class="dp-date">{{selectedLabel}}</text>
+        <text class="dp-week">{{selectedWeek}}</text>
+      </view>
+      <view class="dp-sums">
+        <text class="dp-sum expense" wx:if="{{daySummary.expenseText}}">支出 {{daySummary.expenseText}}</text>
+        <text class="dp-sum income" wx:if="{{daySummary.incomeText}}">收入 {{daySummary.incomeText}}</text>
+      </view>
+    </view>
+
+    <view class="dp-card" wx:if="{{dayBills.length}}">
+      <view class="bill-row" wx:for="{{dayBills}}" wx:key="id" data-id="{{item.id}}" bindtap="editBill" bindlongpress="deleteBill">
+        <view class="bill-icon" style="background: {{item.tint}}">{{item.icon}}</view>
+        <view class="bill-main">
+          <view class="bill-name">{{item.name}}<text class="bill-attach" wx:if="{{item.hasImages}}">📎</text></view>
+          <view class="bill-sub ellipsis">{{item.sub}}</view>
+        </view>
+        <view class="bill-right">
+          <text class="bill-amount num {{item.amountClass}}">{{item.amountText}}</text>
+          <text class="bill-time">{{item.time}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="day-empty" wx:else>
+      <text class="de-title">这一天还没有记录</text>
+      <text class="de-desc">点击下方按钮，补记一笔</text>
+      <view class="btn-mini primary-bg de-btn" bindtap="goRecord">去记一笔</view>
+    </view>
+  </view>
+</view>

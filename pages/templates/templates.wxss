@@ -1,0 +1,197 @@
+.tpl-page {
+  min-height: 100vh;
+  padding: 16rpx 28rpx 60rpx;
+  background: #F7F5F0;
+}
+
+.tpl-card {
+  background: #FFFFFF;
+  border-radius: 26rpx;
+  padding: 0 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(62, 52, 38, 0.04);
+}
+
+.tpl-row {
+  display: flex;
+  align-items: center;
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid #F3EEE6;
+}
+
+.tpl-row:last-child {
+  border-bottom: none;
+}
+
+.tpl-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  flex-shrink: 0;
+  background: #FBEDE8;
+  color: #DE6B47;
+}
+
+.tpl-icon.income {
+  background: #E8F1EC;
+  color: #2E8B6F;
+}
+
+.tpl-icon.transfer {
+  background: #EDF0F8;
+  color: #4A7EBB;
+}
+
+.tpl-main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 18rpx;
+}
+
+.tpl-name-line {
+  display: flex;
+  align-items: center;
+}
+
+.tpl-name {
+  font-size: 29rpx;
+  font-weight: 600;
+  color: #2E2A25;
+  max-width: 300rpx;
+}
+
+.tpl-type {
+  margin-left: 12rpx;
+  font-size: 19rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 8rpx;
+  background: #FBEDE8;
+  color: #C4512E;
+  flex-shrink: 0;
+}
+
+.tpl-type.income {
+  background: #E8F1EC;
+  color: #2E8B6F;
+}
+
+.tpl-type.transfer {
+  background: #EDF0F8;
+  color: #4A7EBB;
+}
+
+.tpl-sub {
+  display: block;
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #A59D91;
+  max-width: 100%;
+}
+
+.tpl-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.tpl-amount {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #DE6B47;
+}
+
+.tpl-amount.income {
+  color: #2E8B6F;
+}
+
+.tpl-amount.transfer {
+  color: #7C8A84;
+}
+
+.tpl-hint {
+  font-size: 18rpx;
+  color: #C4BDB1;
+  margin-top: 4rpx;
+}
+
+.add-btn {
+  margin-top: 34rpx;
+}
+
+.tip-card {
+  margin-top: 28rpx;
+  padding: 24rpx 26rpx;
+  border-radius: 20rpx;
+  background: #FFFDF9;
+  border: 1rpx solid #EDE7DD;
+}
+
+.tip-title {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #4A453E;
+}
+
+.tip-desc {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  line-height: 1.7;
+  color: #9C958A;
+}
+
+.form-seg {
+  flex: 1;
+  display: flex;
+  background: #F2EDE5;
+  border-radius: 999rpx;
+  padding: 4rpx;
+}
+
+.fs-item {
+  flex: 1;
+  text-align: center;
+  height: 56rpx;
+  line-height: 56rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  color: #6E675D;
+}
+
+.fs-item.on {
+  background: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 2rpx 8rpx rgba(62, 52, 38, 0.08);
+}
+
+.fs-item.on.expense {
+  color: #DE6B47;
+}
+
+.fs-item.on.income {
+  color: #2E8B6F;
+}
+
+.fs-item.on.transfer {
+  color: #4A7EBB;
+}
+
+.sheet-actions {
+  display: flex;
+  margin-top: 28rpx;
+}
+
+.sheet-actions .btn-danger {
+  margin-right: 16rpx;
+}
+
+.sheet-actions .btn-primary,
+.sheet-actions .btn-danger {
+  height: 84rpx;
+  line-height: 84rpx;
+}

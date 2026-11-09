@@ -1,0 +1,80 @@
+<view class="edit-page" wx:if="{{!missing}}">
+  <view class="edit-type">
+    <view class="chip {{type === 'expense' ? 'on' : ''}}" data-type="expense" bindtap="onType">支出</view>
+    <view class="chip {{type === 'income' ? 'on' : ''}}" data-type="income" bindtap="onType">收入</view>
+    <view class="chip {{type === 'transfer' ? 'on' : ''}}" data-type="transfer" bindtap="onType">转账</view>
+  </view>
+
+  <view class="amount-card">
+    <text class="amount-cap">金额</text>
+    <view class="amount-input-row">
+      <text class="amount-symbol">¥</text>
+      <input class="amount-input num" type="digit" value="{{amountInput}}" placeholder="0.00" placeholder-class="placeholder" bindinput="onAmount" />
+    </view>
+  </view>
+
+  <view class="form-card">
+    <picker wx:if="{{type !== 'transfer'}}" mode="selector" range="{{categoryOptions}}" range-key="name" value="{{categoryIndex}}" bindchange="onCategory">
+      <view class="form-row">
+        <text class="form-label">分类</text>
+        <view class="form-value">{{categoryName}}<text class="arrow-right">›</text></view>
+      </view>
+    </picker>
+    <picker mode="selector" range="{{accounts}}" range-key="name" value="{{accountIndex}}" bindchange="onAccount">
+      <view class="form-row">
+        <text class="form-label">{{type === 'transfer' ? '转出账户' : '账户'}}</text>
+        <view class="form-value">{{accounts[accountIndex].name}}<text class="arrow-right">›</text></view>
+      </view>
+    </picker>
+    <picker wx:if="{{type === 'transfer'}}" mode="selector" range="{{accounts}}" range-key="name" value="{{toAccountIndex}}" bindchange="onToAccount">
+      <view class="form-row">
+        <text class="form-label">转入账户</text>
+        <view class="form-value">{{accounts[toAccountIndex].name}}<text class="arrow-right">›</text></view>
+      </view>
+    </picker>
+    <picker mode="date" value="{{date}}" bindchange="onDate">
+      <view class="form-row">
+        <text class="form-label">日期</text>
+        <view class="form-value">{{date}}<text class="arrow-right">›</text></view>
+      </view>
+    </picker>
+    <picker mode="time" value="{{time}}" bindchange="onTime">
+      <view class="form-row">
+        <text class="form-label">时间</text>
+        <view class="form-value">{{time}}<text class="arrow-right">›</text></view>
+      </view>
+    </picker>
+  </view>
+
+  <view class="section-label">备注</view>
+  <view class="note-card">
+    <textarea class="edit-note" value="{{note}}" maxlength="50" placeholder="写点什么（选填）" placeholder-class="placeholder" bindinput="onNote"></textarea>
+    <view class="note-count">{{note.length}}/50</view>
+  </view>
+
+  <view class="section-label">图片凭证</view>
+  <view class="img-row">
+    <view class="img-item" wx:for="{{images}}" wx:key="*this">
+      <image class="img-thumb" src="{{item}}" mode="aspectFill" data-src="{{item}}" bindtap="previewImage"></image>
+      <view class="img-del" data-index="{{index}}" catchtap="removeImage">×</view>
+    </view>
+    <view class="img-add" wx:if="{{images.length < 3}}" bindtap="chooseImage">
+      <text class="img-plus">＋</text>
+      <text class="img-text">添加</text>
+    </view>
+  </view>
+
+  <view class="edit-actions safe-bottom">
+    <view class="btn-primary" bindtap="save">保存修改</view>
+    <view class="btn-danger delete-btn" bindtap="removeBill">删除这笔记录</view>
+  </view>
+</view>
+
+<view class="missing-page" wx:else>
+  <view class="empty">
+    <view class="empty-icon">🧾</view>
+    <view class="empty-title">记录不存在</view>
+    <view class="empty-desc">它可能已被删除</view>
+    <view class="btn-ghost empty-btn" bindtap="goBack">返回</view>
+  </view>
+</view>

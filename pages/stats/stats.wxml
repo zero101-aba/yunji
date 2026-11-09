@@ -1,0 +1,92 @@
+<view class="stats-page">
+  <view class="top-bar">
+    <view class="period-nav">
+      <view class="p-arrow" data-dir="-1" bindtap="shift">‹</view>
+      <text class="p-label">{{label}}</text>
+      <view class="p-arrow" data-dir="1" bindtap="shift">›</view>
+    </view>
+    <view class="seg period-seg">
+      <view class="seg-item {{period === 'month' ? 'on' : ''}}" data-period="month" bindtap="switchPeriod">月</view>
+      <view class="seg-item {{period === 'year' ? 'on' : ''}}" data-period="year" bindtap="switchPeriod">年</view>
+    </view>
+  </view>
+
+  <view class="hero">
+    <view class="hero-head">
+      <text class="hero-cap">{{period === 'month' ? '本月支出' : '本年支出'}}</text>
+      <text class="hero-amount num">{{summary.expenseText}}</text>
+    </view>
+    <view class="hero-grid">
+      <view class="hero-cell">
+        <text class="hg-cap">收入</text>
+        <text class="hg-val num">{{summary.incomeText}}</text>
+      </view>
+      <view class="hero-cell">
+        <text class="hg-cap">结余</text>
+        <text class="hg-val num">{{summary.balanceText}}</text>
+      </view>
+      <view class="hero-cell">
+        <text class="hg-cap">日均支出</text>
+        <text class="hg-val num">{{summary.avgText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="compare-row">
+    <view class="cmp-card" wx:if="{{showMom}}">
+      <text class="cmp-cap">环比 · 上月</text>
+      <text class="cmp-val num {{compare.momState}}">{{compare.momText}}</text>
+    </view>
+    <view class="cmp-card">
+      <text class="cmp-cap">同比 · {{compare.yoyLabel}}</text>
+      <text class="cmp-val num {{compare.yoyState}}">{{compare.yoyText}}</text>
+    </view>
+  </view>
+
+  <view class="chart-card">
+    <view class="card-head">
+      <text class="card-title">分类占比</text>
+      <view class="mini-seg">
+        <view class="mini-item {{type === 'expense' ? 'on' : ''}}" data-type="expense" bindtap="switchType">支出</view>
+        <view class="mini-item {{type === 'income' ? 'on' : ''}}" data-type="income" bindtap="switchType">收入</view>
+      </view>
+    </view>
+    <view class="chart-sub">{{totalCount}} 笔 · 合计 {{totalAmountText}}</view>
+    <canvas type="2d" id="donut" class="donut-canvas"></canvas>
+    <view class="rank-list">
+      <view class="rank-row" wx:for="{{ranks}}" wx:key="id" data-id="{{item.id}}" data-clickable="{{item.clickable}}" bindtap="openCategory">
+        <view class="rank-icon" style="background: {{item.tint}}">{{item.icon}}</view>
+        <view class="rank-mid">
+          <view class="rank-line">
+            <text class="rank-name">{{item.name}}</text>
+            <text class="rank-amt num">{{item.amountText}}</text>
+          </view>
+          <view class="rank-track">
+            <view class="rank-fill" style="width: {{item.width}}%; background: {{item.color}}"></view>
+          </view>
+          <view class="rank-meta">
+            <text>{{item.percentText}}</text>
+            <text>{{item.count}} 笔</text>
+          </view>
+        </view>
+        <text class="rank-arrow" wx:if="{{item.clickable}}">›</text>
+      </view>
+      <view class="rank-empty" wx:if="{{ranks.length === 0}}">还没有{{type === 'expense' ? '支出' : '收入'}}记录</view>
+    </view>
+  </view>
+
+  <view class="chart-card">
+    <view class="card-head">
+      <text class="card-title">{{trendTitle}}</text>
+      <text class="card-more">单位：元</text>
+    </view>
+    <canvas type="2d" id="trend" class="trend-canvas"></canvas>
+  </view>
+
+  <view class="share-entry" wx:if="{{period === 'month'}}" bindtap="openShare">
+    <text>生成月度账单图片</text>
+    <text class="share-arrow">›</text>
+  </view>
+
+  <view class="foot-note">数据仅存本机 · 统计随记账实时更新</view>
+</view>

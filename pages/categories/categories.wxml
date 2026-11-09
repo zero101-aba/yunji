@@ -1,0 +1,50 @@
+<view class="cat-page">
+  <view class="type-seg-wrap">
+    <view class="seg">
+      <view class="seg-item {{type === 'expense' ? 'on' : ''}}" data-type="expense" bindtap="switchType">支出分类</view>
+      <view class="seg-item {{type === 'income' ? 'on' : ''}}" data-type="income" bindtap="switchType">收入分类</view>
+    </view>
+  </view>
+
+  <view class="list-intro">共 {{totalCount}} 个分类，隐藏的分类不会出现在记账页。拖动排序可用箭头完成。</view>
+
+  <view class="cat-card" wx:for="{{groups}}" wx:key="id" wx:for-item="group">
+    <view class="top-row {{group.hidden ? 'dim' : ''}}" data-id="{{group.id}}" bindtap="edit">
+      <view class="cat-icon" style="background: {{group.tint}}">{{group.icon}}</view>
+      <view class="cat-main">
+        <view class="cat-name-line">
+          <text class="cat-name">{{group.name}}</text>
+          <text class="hidden-tag" wx:if="{{group.hidden}}">已隐藏</text>
+        </view>
+        <text class="cat-sub">{{group.children.length}} 个二级分类</text>
+      </view>
+      <view class="cat-actions">
+        <view class="mini-act" data-id="{{group.id}}" data-dir="-1" catchtap="move">↑</view>
+        <view class="mini-act" data-id="{{group.id}}" data-dir="1" catchtap="move">↓</view>
+        <view class="mini-act text" data-id="{{group.id}}" data-hidden="{{group.hidden}}" catchtap="toggleHide">{{group.hidden ? '显示' : '隐藏'}}</view>
+      </view>
+    </view>
+
+    <view class="child-list">
+      <view class="child-row {{item.hidden ? 'dim' : ''}}" wx:for="{{group.children}}" wx:key="id" wx:for-item="item" data-id="{{item.id}}" bindtap="edit">
+        <text class="child-icon">{{item.icon}}</text>
+        <text class="child-name">{{item.name}}</text>
+        <text class="hidden-tag small" wx:if="{{item.hidden}}">隐藏</text>
+        <view class="cat-actions">
+          <view class="mini-act" data-id="{{item.id}}" data-dir="-1" catchtap="move">↑</view>
+          <view class="mini-act" data-id="{{item.id}}" data-dir="1" catchtap="move">↓</view>
+          <view class="mini-act text" data-id="{{item.id}}" data-hidden="{{item.hidden}}" catchtap="toggleHide">{{item.hidden ? '显示' : '隐藏'}}</view>
+        </view>
+      </view>
+      <view class="add-child" data-parent="{{group.id}}" catchtap="addChild">＋ 添加二级分类</view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{groups.length === 0}}">
+    <view class="empty-icon">🏷️</view>
+    <view class="empty-title">还没有分类</view>
+    <view class="empty-desc">添加常用分类，记账更快</view>
+  </view>
+
+  <view class="btn-primary add-btn" bindtap="addTop">＋ 添加一级分类</view>
+</view>

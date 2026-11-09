@@ -1,0 +1,55 @@
+<view class="acc-edit-page">
+  <view class="avatar-preview">
+    <view class="big-icon">{{icon}}</view>
+    <view class="preview-name">{{name || '新账户'}}</view>
+    <view class="preview-balance num" wx:if="{{isEdit}}">当前余额 {{balanceText}}</view>
+  </view>
+
+  <view class="section-label">账户类型</view>
+  <view class="type-grid">
+    <view class="type-cell {{type === item.key ? 'on' : ''}}" wx:for="{{types}}" wx:key="key" data-type="{{item.key}}" bindtap="selectType">
+      <text class="type-icon">{{item.icon}}</text>
+      <text class="type-label">{{item.label}}</text>
+    </view>
+  </view>
+
+  <view class="section-label">账户信息</view>
+  <view class="form-card">
+    <view class="form-row">
+      <text class="form-label">名称</text>
+      <input class="form-input" value="{{name}}" maxlength="12" placeholder="例如：工资卡" placeholder-class="placeholder" bindinput="onName" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">初始余额</text>
+      <input class="form-input" type="digit" value="{{initInput}}" placeholder="0.00" placeholder-class="placeholder" bindinput="onInit" />
+    </view>
+    <block wx:if="{{type === 'credit'}}">
+      <view class="form-row">
+        <text class="form-label">信用额度</text>
+        <input class="form-input" type="digit" value="{{quotaInput}}" placeholder="0.00" placeholder-class="placeholder" bindinput="onQuota" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">账单日</text>
+        <input class="form-input" type="number" value="{{billDay}}" placeholder="10" placeholder-class="placeholder" bindinput="onBillDay" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">还款日</text>
+        <input class="form-input" type="number" value="{{repayDay}}" placeholder="20" placeholder-class="placeholder" bindinput="onRepayDay" />
+      </view>
+    </block>
+  </view>
+
+  <view class="hint-card" wx:if="{{type === 'credit'}}">
+    信用卡消费会累计已用额度，可用额度 = 额度 − 已用额度。信用卡余额不计入总资产。
+  </view>
+
+  <view class="section-label">图标</view>
+  <view class="icon-grid">
+    <view class="icon-cell {{icon === item ? 'on' : ''}}" wx:for="{{icons}}" wx:key="*this" data-icon="{{item}}" bindtap="selectIcon">{{item}}</view>
+  </view>
+
+  <view class="actions safe-bottom">
+    <view class="btn-primary" bindtap="save">保存</view>
+    <view class="btn-danger remove-btn" wx:if="{{isEdit}}" bindtap="remove">删除账户</view>
+  </view>
+</view>

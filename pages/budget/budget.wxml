@@ -1,0 +1,64 @@
+<view class="budget-page">
+  <view class="month-nav">
+    <view class="m-arrow" data-dir="-1" bindtap="shift">‹</view>
+    <text class="m-label">{{ymLabel}}</text>
+    <view class="m-arrow" data-dir="1" bindtap="shift">›</view>
+  </view>
+
+  <view class="budget-hero">
+    <view class="bh-row">
+      <text class="bh-cap">本月预算</text>
+      <text class="bh-percent" wx:if="{{summary.hasBudget}}">{{summary.percent}}%</text>
+    </view>
+    <view class="bh-total num">{{summary.hasBudget ? summary.totalText : '未设置'}}</view>
+    <view class="bh-bar" wx:if="{{summary.hasBudget}}">
+      <view class="bh-fill {{summary.over ? 'over' : ''}}" style="width: {{summary.barWidth}}%"></view>
+    </view>
+    <view class="bh-cols" wx:if="{{summary.hasBudget}}">
+      <view class="bh-col">
+        <text class="bh-col-cap">已支出</text>
+        <text class="bh-col-val num">{{summary.usedText}}</text>
+      </view>
+      <view class="bh-col">
+        <text class="bh-col-cap">{{summary.over ? '已超支' : '剩余'}}</text>
+        <text class="bh-col-val num {{summary.over ? 'over' : ''}}">{{summary.remainText}}</text>
+      </view>
+    </view>
+    <view class="bh-tip" wx:else>设置总预算后，记账页会实时显示进度，达到 80% 和 100% 时提醒你。</view>
+  </view>
+
+  <view class="section-label">总预算（元）</view>
+  <view class="total-card">
+    <text class="total-symbol">¥</text>
+    <input class="total-input num" type="digit" value="{{totalInput}}" placeholder="0.00" placeholder-class="placeholder" bindinput="onTotal" />
+    <text class="total-hint">每月单独设置</text>
+  </view>
+
+  <view class="section-label">分类预算（选填）</view>
+  <view class="cat-budget-card">
+    <view class="cb-row" wx:for="{{rows}}" wx:key="id">
+      <view class="cb-head">
+        <view class="cb-icon" style="background: {{item.tint}}; color: {{item.color}}">{{item.icon}}</view>
+        <view class="cb-main">
+          <view class="cb-name-line">
+            <text class="cb-name">{{item.name}}</text>
+            <text class="cb-used">已用 {{item.usedText}}</text>
+          </view>
+          <view class="cb-bar" wx:if="{{item.input}}">
+            <view class="cb-fill {{item.over ? 'over' : ''}}" style="width: {{item.barWidth}}%; background: {{item.over ? '' : item.color}}"></view>
+          </view>
+        </view>
+        <view class="cb-input-wrap">
+          <text class="cb-symbol">¥</text>
+          <input class="cb-input num" type="digit" value="{{item.input}}" placeholder="不限" placeholder-class="placeholder" data-index="{{index}}" bindinput="onRowInput" />
+        </view>
+      </view>
+    </view>
+    <view class="empty cb-empty" wx:if="{{rows.length === 0}}">暂无支出分类，请先到分类管理中添加</view>
+  </view>
+
+  <view class="actions safe-bottom">
+    <view class="btn-primary" bindtap="save">保存预算</view>
+    <view class="btn-ghost clear-btn" wx:if="{{summary.hasBudget}}" bindtap="clearBudget">清除本月预算</view>
+  </view>
+</view>

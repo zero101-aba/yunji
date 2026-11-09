@@ -1,0 +1,28 @@
+<view class="share-page">
+  <view class="page-title">
+    <view class="title">账单分享</view>
+    <view class="sub">生成一张月报海报，保存或转发给好友</view>
+  </view>
+
+  <view class="month-nav">
+    <view class="m-arrow" data-dir="-1" bindtap="shift">‹</view>
+    <text class="m-label">{{ymLabel}}</text>
+    <view class="m-arrow" data-dir="1" bindtap="shift">›</view>
+  </view>
+
+  <view class="poster-wrap">
+    <canvas type="2d" id="poster" class="poster-canvas"></canvas>
+  </view>
+
+  <view class="share-actions">
+    <view class="btn-ghost flex1" bindtap="copyText">复制账单文字</view>
+    <view class="btn-primary flex1 save-btn" bindtap="saveToAlbum">保存到相册</view>
+  </view>
+
+  <button class="btn-ghost share-btn" open-type="share">转发给好友</button>
+
+  <view class="tip-card">
+    <text class="tip-title">关于分享</text>
+    <text class="tip-desc">海报仅包含月度收支、分类构成与记账天数，不包含任何备注和账户余额。开启「金额隐私模式」后，海报上的金额会显示为 ****。</text>
+  </view>
+</view>
