@@ -3,7 +3,7 @@
     {
       "path": "pages/record/record",
       "style": {
-        "navigationBarTitleText": "星即"
+        "navigationBarTitleText": "星记"
       }
     },
     {
@@ -99,13 +99,13 @@
     {
       "path": "pages/about/about",
       "style": {
-        "navigationBarTitleText": "关于星即"
+        "navigationBarTitleText": "关于星记"
       }
     }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "星即",
+    "navigationBarTitleText": "星记",
     "navigationBarBackgroundColor": "#FFFFFF",
     "backgroundColor": "#F6F7F9",
     "backgroundTextStyle": "dark"

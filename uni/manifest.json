@@ -1,5 +1,5 @@
 {
-    "name" : "星即",
+    "name" : "星记",
     "appid" : "__UNI__38407AB",
     "description" : "打开就能记、不用注册、数据只存在本机的记账工具",
     "versionName" : "1.0.0",
@@ -56,7 +56,7 @@
         "usingComponents" : true
     },
     "h5" : {
-        "title" : "星即",
+        "title" : "星记",
         "router" : {
             "mode" : "hash"
         }

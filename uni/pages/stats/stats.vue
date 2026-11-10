@@ -1,5 +1,6 @@
 <template>
 <view class="stats-page">
+  <view class="pg-body" :class="navDir === 1 ? 'pg-in-next' : navDir === -1 ? 'pg-in-prev' : ''">
   <view class="top-bar">
     <view class="period-nav">
       <view class="p-arrow" data-dir="-1" @tap="shift">‹</view>
@@ -91,13 +92,15 @@
 
   <view class="foot-note">数据仅存本机 · 统计随记账实时更新</view>
 
-  <x-tabbar :current="2" />
+  </view>
+  <x-tabbar current="stats" />
 </view>
 </template>
 
 <script>import store from '../../utils/store.js';
 import dateUtil from '../../utils/date.js';
 import money from '../../utils/money.js';
+import tabnav from '../../utils/tabnav.js';
 function hexToRgba(hex, alpha) {
   const value = String(hex || '#86909C').replace('#', '');
   const full = value.length === 3 ? value.split('').map(c => c + c).join('') : value;
@@ -124,6 +127,7 @@ function changeState(current, previous) {
 export default {
   data() {
     return {
+      navDir: 0,
       period: 'month',
       anchorYm: '',
       anchorYear: '',
@@ -160,6 +164,13 @@ export default {
     this.refresh();
   },
   onShow() {
+    const nav = tabnav.take();
+    if (nav && nav.key === 'stats') {
+      this.navDir = nav.dir;
+      setTimeout(() => {
+        this.navDir = 0;
+      }, 400);
+    }
     const settings = store.getSettings();
     if (this.hideAmount !== !!settings.hideAmount) {
       this.setData({

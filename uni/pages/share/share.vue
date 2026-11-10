@@ -183,7 +183,7 @@ export default {
       ctx.setTextAlign('left');
       ctx.setFillStyle('#86909C');
       ctx.setFontSize(Math.round(w * 0.028));
-      ctx.fillText('星即 · 月度账单', pad, h * 0.092);
+      ctx.fillText('星记 · 月度账单', pad, h * 0.092);
       ctx.setFillStyle('#1F2329');
       ctx.setFontSize(Math.round(w * 0.072));
       ctx.fillText(this.ymLabel, pad, h * 0.172);
@@ -370,7 +370,7 @@ export default {
     },
     copyText() {
       const d = this;
-      const lines = ['【' + d.ymLabel + '账单】', '支出：' + d.expenseText, '收入：' + d.incomeText, '结余：' + d.balanceText, '共 ' + d.count + ' 笔 · 记账 ' + d.days + ' 天', '—— 星即 · 数据只存在本机'];
+      const lines = ['【' + d.ymLabel + '账单】', '支出：' + d.expenseText, '收入：' + d.incomeText, '结余：' + d.balanceText, '共 ' + d.count + ' 笔 · 记账 ' + d.days + ' 天', '—— 星记 · 数据只存在本机'];
       uni.setClipboardData({
         data: lines.join('\n'),
         success: () => uni.showToast({

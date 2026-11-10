@@ -1,5 +1,6 @@
 <template>
 <view class="list-page" @touchstart="onTouchStart" @touchend="onTouchEnd">
+  <view class="pg-body" :class="navDir === 1 ? 'pg-in-next' : navDir === -1 ? 'pg-in-prev' : ''">
   <view class="sticky-head">
     <view class="head-row">
       <view class="month-box">
@@ -136,13 +137,15 @@
     </view>
   </view>
 
-  <x-tabbar :current="1" />
+  </view>
+  <x-tabbar current="list" />
 </view>
 </template>
 
 <script>import store from '../../utils/store.js';
 import dateUtil from '../../utils/date.js';
 import money from '../../utils/money.js';
+import tabnav from '../../utils/tabnav.js';
 function hexToRgba(hex, alpha) {
   const value = String(hex || '#86909C').replace('#', '');
   const full = value.length === 3 ? value.split('').map(c => c + c).join('') : value;
@@ -155,6 +158,7 @@ const PAGE_SIZE = 30;
 export default {
   data() {
     return {
+      navDir: 0,
       ym: '',
       ymLabel: '',
       hideAmount: false,
@@ -200,6 +204,13 @@ export default {
     });
   },
   onShow() {
+    const nav = tabnav.take();
+    if (nav && nav.key === 'list') {
+      this.navDir = nav.dir;
+      setTimeout(() => {
+        this.navDir = 0;
+      }, 400);
+    }
     const settings = store.getSettings();
     this.setData({
       hideAmount: !!settings.hideAmount

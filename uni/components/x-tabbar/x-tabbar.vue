@@ -1,19 +1,19 @@
 <template>
   <view class="xtb-wrap">
     <view class="xtb-holder"></view>
-    <view class="xtb" :class="'fx-' + effect">
+    <view class="xtb">
       <view class="xtb-capsule">
         <view class="xtb-thumb-layer">
-          <view class="xtb-thumb-mover" :style="'transform: translate3d(' + current * 100 + '%, 0, 0)'">
-            <view class="xtb-thumb" :key="tick"></view>
+          <view class="xtb-thumb-mover" :style="'transform: translate3d(' + activeIndex * 100 + '%, 0, 0)'">
+            <view :class="'xtb-thumb ' + (thumbIn ? 'xtb-thumb-in' : '')"></view>
           </view>
         </view>
         <view class="xtb-tabs">
           <view
             class="xtb-tab"
             v-for="(item, index) in tabs"
-            :key="item.path"
-            :class="{ on: index === current }"
+            :key="item.key"
+            :class="{ on: item.key === current }"
             @tap="switchTo(index)"
           >
             <text class="xtb-ico">{{ item.icon }}</text>
@@ -25,52 +25,63 @@
   </view>
 </template>
 
-<script>import store from '../../utils/store.js';
+<script>import tabnav from '../../utils/tabnav.js';
+const TABS = [{
+  key: 'record',
+  label: '记账',
+  icon: '✏️',
+  path: '/pages/record/record'
+}, {
+  key: 'list',
+  label: '明细',
+  icon: '📋',
+  path: '/pages/list/list'
+}, {
+  key: 'stats',
+  label: '统计',
+  icon: '📊',
+  path: '/pages/stats/stats'
+}, {
+  key: 'mine',
+  label: '我的',
+  icon: '👤',
+  path: '/pages/mine/mine'
+}];
 export default {
   name: 'XTabbar',
   props: {
     current: {
-      type: Number,
-      default: 0
+      type: String,
+      default: 'record'
     }
   },
   data() {
     return {
-      tick: 0,
-      effect: 'slide',
-      tabs: [{
-        label: '记账',
-        icon: '✏️',
-        path: '/pages/record/record'
-      }, {
-        label: '明细',
-        icon: '📋',
-        path: '/pages/list/list'
-      }, {
-        label: '统计',
-        icon: '📊',
-        path: '/pages/stats/stats'
-      }, {
-        label: '我的',
-        icon: '👤',
-        path: '/pages/mine/mine'
-      }]
+      tabs: TABS,
+      thumbIn: false
     };
   },
-  mounted() {
-    const effect = store.getSettings().tabEffect;
-    this.effect = ['jelly', 'slide', 'fade', 'none'].indexOf(effect) >= 0 ? effect : 'slide';
-  },
-  watch: {
-    current() {
-      this.tick += 1;
+  computed: {
+    activeIndex() {
+      const index = this.tabs.findIndex(t => t.key === this.current);
+      return index < 0 ? 0 : index;
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.thumbIn = true;
+    }, 30);
   },
   methods: {
     switchTo(index) {
-      if (index === this.current) return;
+      if (index === this.activeIndex) return;
+      const tabs = this.tabs;
+      tabnav.set({
+        key: tabs[index].key,
+        dir: index > this.activeIndex ? 1 : -1
+      });
       uni.reLaunch({
-        url: this.tabs[index].path
+        url: tabs[index].path
       });
     }
   }
@@ -113,7 +124,6 @@ export default {
   -webkit-backdrop-filter: blur(20rpx);
   backdrop-filter: blur(20rpx);
   box-shadow: 0 12rpx 36rpx rgba(31, 35, 41, 0.12), 0 0 0 2rpx rgba(255, 255, 255, 0.9);
-  overflow: hidden;
 }
 
 .xtb-thumb-layer {
@@ -122,6 +132,8 @@ export default {
   top: 0;
   right: 0;
   bottom: 0;
+  border-radius: 63rpx;
+  overflow: hidden;
 }
 
 .xtb-thumb-mover {
@@ -143,26 +155,22 @@ export default {
   border-radius: 56rpx;
   background: #FFFFFF;
   box-shadow: 0 6rpx 16rpx rgba(31, 35, 41, 0.12);
-  transform-origin: center center;
 }
 
-/* 果冻弹性 */
-.fx-jelly .xtb-thumb {
-  animation: xtb-jelly 420ms cubic-bezier(0.34, 1.35, 0.64, 1) both;
+/* 选中块在原位置淡入，不做位移 */
+.xtb-thumb-in {
+  animation: xtb-thumb-fade 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* 柔和淡入 */
-.fx-fade .xtb-thumb {
-  animation: xtb-fade 240ms ease-out both;
-}
-
-/* 无动画 */
-.fx-none .xtb-thumb {
-  animation: none;
-}
-
-.fx-none .xtb-thumb-mover {
-  transition: none;
+@keyframes xtb-thumb-fade {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .xtb-tabs {
@@ -208,34 +216,5 @@ export default {
 .xtb-tab.on .xtb-label {
   color: #00875A;
   font-weight: 600;
-}
-
-@keyframes xtb-fade {
-  0% {
-    opacity: 0;
-    transform: scale(0.94);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes xtb-jelly {
-  0% {
-    transform: scale(1.06, 0.92);
-  }
-  30% {
-    transform: scale(0.94, 1.05);
-  }
-  58% {
-    transform: scale(1.02, 0.98);
-  }
-  78% {
-    transform: scale(0.99, 1.01);
-  }
-  100% {
-    transform: scale(1, 1);
-  }
 }
 </style>

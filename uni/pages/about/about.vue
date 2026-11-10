@@ -2,7 +2,7 @@
 <view class="about-page">
   <view class="about-hero">
     <image class="app-logo" src="/static/icons/icon-192.png" mode="aspectFit" />
-    <view class="app-name">星即</view>
+    <view class="app-name">星记</view>
     <view class="app-desc">打开就能记，不用注册，数据只在自己手机里</view>
     <view class="version-chip">v{{version}}</view>
     <text class="created" v-if="createdText">{{createdText}}</text>
@@ -88,7 +88,7 @@
     <view class="btn-ghost fb-btn" @tap="copyInfo">复制反馈信息</view>
   </view>
 
-  <view class="footer">星即 · 免登录本地账本 · v{{version}}</view>
+  <view class="footer">星记 · 免登录本地账本 · v{{version}}</view>
 </view>
 </template>
 
@@ -164,14 +164,14 @@ export default {
     showPrivacy() {
       uni.showModal({
         title: '隐私与数据',
-        content: '星即不需要登录，也不会上传任何数据。所有账单、账户与设置都保存在你设备的本地存储中，我们无法读取，也无法帮你找回。',
+        content: '星记不需要登录，也不会上传任何数据。所有账单、账户与设置都保存在你设备的本地存储中，我们无法读取，也无法帮你找回。',
         showCancel: false,
         confirmText: '知道了',
         confirmColor: '#00B578'
       });
     },
     copyInfo() {
-      const text = ['星即 v' + this.version, '账单 ' + this.billCount + ' 笔 · 月份 ' + this.monthCount + ' 个', '账户 ' + this.accountCount + ' 个', '本地存储 ' + this.storageText].join('\n');
+      const text = ['星记 v' + this.version, '账单 ' + this.billCount + ' 笔 · 月份 ' + this.monthCount + ' 个', '账户 ' + this.accountCount + ' 个', '本地存储 ' + this.storageText].join('\n');
       uni.setClipboardData({
         data: text,
         success: () => uni.showToast({

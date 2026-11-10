@@ -20,8 +20,7 @@ const DEFAULT_SETTINGS = {
   budgetAlert: {},
   reminder: false,
   autoClipboard: false,
-  clipboardSeen: '',
-  tabEffect: 'slide'
+  clipboardSeen: ''
 }
 
 const SEED_ACCOUNTS = [

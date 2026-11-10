@@ -155,7 +155,7 @@ export default {
         lines.push([csvCell(b.date), csvCell(b.time), csvCell(TYPE_LABEL[b.type] || b.type), csvCell(b.type === 'transfer' ? '转账' : cat ? store.categoryDisplayName(b.categoryId) : '未分类'), csvCell(accountText), csvCell(money.centToInput(b.amount)), csvCell(b.note || '')].join(','));
       });
       const csv = '\ufeff' + lines.join('\r\n');
-      const fileName = '星即_' + (scope === 'all' ? '全部账单' : scope) + '.csv';
+      const fileName = '星记_' + (scope === 'all' ? '全部账单' : scope) + '.csv';
       this.setData({
         busy: true
       });
@@ -321,7 +321,7 @@ export default {
       this.setData({
         busy: true
       });
-      this.saveTextFile(this.backupText, '星即_备份_' + dateUtil.todayStr() + '.json', '备份文件已保存', this.backupText);
+      this.saveTextFile(this.backupText, '星记_备份_' + dateUtil.todayStr() + '.json', '备份文件已保存', this.backupText);
     },
     onRestoreInput(e) {
       this.setData({
@@ -358,7 +358,7 @@ export default {
           if (!result.ok) {
             uni.showModal({
               title: '恢复失败',
-              content: result.reason === 'format' ? '这不是有效的「星即」备份内容。' : '写入失败，可能是存储空间不足。',
+              content: result.reason === 'format' ? '这不是有效的「星记」备份内容。' : '写入失败，可能是存储空间不足。',
               showCancel: false,
               confirmColor: '#00B578'
             });

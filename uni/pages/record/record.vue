@@ -1,5 +1,6 @@
 <template>
 <view class="rec">
+  <view class="pg-body" :class="navDir === 1 ? 'pg-in-next' : navDir === -1 ? 'pg-in-prev' : ''">
   <!-- 预算提示 -->
   <view class="alert-banner" v-if="alertText">{{alertText}}</view>
 
@@ -133,7 +134,7 @@
   <view class="guide-mask" v-if="showGuide">
     <view class="guide-card">
       <view class="guide-logo">🧾</view>
-      <view class="guide-title">欢迎使用星即</view>
+      <view class="guide-title">欢迎使用星记</view>
       <view class="guide-desc">打开就能记，不用注册，数据只留在你自己手机里。</view>
       <view class="guide-list">
         <view class="guide-row">
@@ -256,7 +257,8 @@
     </view>
   </view>
 
-  <x-tabbar :current="0" />
+  </view>
+  <x-tabbar current="record" />
 </view>
 </template>
 
@@ -264,6 +266,7 @@
 import dateUtil from '../../utils/date.js';
 import money from '../../utils/money.js';
 import calc from '../../utils/calc.js';
+import tabnav from '../../utils/tabnav.js';
 function hexToRgba(hex, alpha) {
   const value = String(hex || '#86909C').replace('#', '');
   const full = value.length === 3 ? value.split('').map(c => c + c).join('') : value;
@@ -289,6 +292,7 @@ function shortDate(dateStr) {
 export default {
   data() {
     return {
+      navDir: 0,
       type: 'expense',
       expr: '',
       amountFont: 88,
@@ -332,6 +336,13 @@ export default {
     });
   },
   onShow() {
+    const nav = tabnav.take();
+    if (nav && nav.key === 'record') {
+      this.navDir = nav.dir;
+      setTimeout(() => {
+        this.navDir = 0;
+      }, 400);
+    }
     const app = getApp();
     if (app && app.globalData && app.globalData.justLaunched) {
       app.globalData.justLaunched = false;
@@ -951,6 +962,13 @@ export default {
   flex-direction: column;
   background: #F6F7F9;
   overflow: hidden;
+}
+
+.rec .pg-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .rec-main {

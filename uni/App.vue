@@ -575,5 +575,31 @@ button::after {
   transform: translateX(40rpx);
 }
 
+/* 底部 tab 切换：页面淡入 + 轻缩放（底栏不动，无横向位移） */
+page {
+  background: #F6F7F9;
+}
+
+.pg-body {
+  width: 100%;
+}
+
+.pg-in-next,
+.pg-in-prev {
+  will-change: opacity, transform;
+  transform-origin: 50% 50%;
+  animation: pg-in-fade 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pg-in-fade {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 </style>
 
