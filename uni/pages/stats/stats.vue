@@ -90,6 +90,8 @@
   </view>
 
   <view class="foot-note">数据仅存本机 · 统计随记账实时更新</view>
+
+  <x-tabbar :current="2" />
 </view>
 </template>
 

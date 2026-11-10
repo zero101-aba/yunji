@@ -255,6 +255,8 @@
       </view>
     </view>
   </view>
+
+  <x-tabbar :current="0" />
 </view>
 </template>
 
@@ -334,7 +336,7 @@ export default {
     if (app && app.globalData && app.globalData.justLaunched) {
       app.globalData.justLaunched = false;
       if (store.getSettings().defaultPage === 'list') {
-        uni.switchTab({
+        uni.reLaunch({
           url: '/pages/list/list'
         });
         return;

@@ -106,6 +106,14 @@
         <view class="toggle-dot"></view>
       </view>
     </view>
+    <view class="menu-row" @tap="chooseTabEffect">
+      <view class="menu-icon" style="background: #E8F1FF">🌈</view>
+      <view class="menu-main">
+        <text class="menu-title">底部切换效果</text>
+        <text class="menu-sub">{{tabEffectLabel}}</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
     <view class="menu-row">
       <view class="menu-icon" style="background: #E8F1FF">💳</view>
       <view class="menu-main">
@@ -142,6 +150,8 @@
     <text class="notice-title">数据只属于你</text>
     <text class="notice-desc">所有账单保存在当前设备的应用本地存储中，不上传服务器。清理应用缓存、卸载应用或更换设备会丢失数据，请定期在「数据与备份」中备份。</text>
   </view>
+
+  <x-tabbar :current="3" />
 </view>
 </template>
 
@@ -159,6 +169,8 @@ export default {
       templatesCount: 0,
       hideAmount: false,
       autoClipboard: false,
+      tabEffect: 'slide',
+      tabEffectLabel: '顺滑滑动',
       defaultPage: 'record',
       defaultPageLabel: '打开即记账',
       storageText: '',
@@ -182,6 +194,8 @@ export default {
       const storage = store.storageInfo();
       const totalAssets = accounts.reduce((sum, a) => sum + (Number(a.balance) || 0), 0);
       const percent = storage.limitSize ? Math.round(storage.currentSize / storage.limitSize * 100) : 0;
+      const effectNames = { jelly: '果冻弹性', slide: '顺滑滑动', fade: '柔和淡入', none: '无动画' };
+      const tabEffect = effectNames[settings.tabEffect] ? settings.tabEffect : 'slide';
       this.setData({
         totalAssetsText: money.money(totalAssets, settings.hideAmount),
         monthExpenseText: money.money(totals.expense, settings.hideAmount),
@@ -191,6 +205,8 @@ export default {
         templatesCount: templates.length,
         hideAmount: !!settings.hideAmount,
         autoClipboard: !!settings.autoClipboard,
+        tabEffect,
+        tabEffectLabel: effectNames[tabEffect],
         defaultPage: settings.defaultPage,
         defaultPageLabel: settings.defaultPage === 'list' ? '打开即看明细' : '打开即记账',
         storageText: Math.round(storage.currentSize) + ' KB / ' + Math.round(storage.limitSize / 1024) + ' MB',
@@ -245,6 +261,18 @@ export default {
       store.saveSettings({ autoClipboard: next });
       this.refresh();
       uni.showToast({ title: next ? '已开启自动记账' : '已关闭自动记账', icon: 'none' });
+    },
+    chooseTabEffect() {
+      const keys = ['slide', 'jelly', 'fade', 'none'];
+      const labels = ['顺滑滑动', '果冻弹性', '柔和淡入', '无动画'];
+      uni.showActionSheet({
+        itemList: labels,
+        success: res => {
+          store.saveSettings({ tabEffect: keys[res.tapIndex] });
+          this.refresh();
+          uni.showToast({ title: '已切换为' + labels[res.tapIndex], icon: 'none' });
+        }
+      });
     },
     chooseDefaultPage() {
       uni.showActionSheet({

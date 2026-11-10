@@ -109,29 +109,5 @@
     "navigationBarBackgroundColor": "#FFFFFF",
     "backgroundColor": "#F6F7F9",
     "backgroundTextStyle": "dark"
-  },
-  "tabBar": {
-    "color": "#86909C",
-    "selectedColor": "#00B578",
-    "backgroundColor": "#FFFFFF",
-    "borderStyle": "white",
-    "list": [
-      {
-        "pagePath": "pages/record/record",
-        "text": "记账"
-      },
-      {
-        "pagePath": "pages/list/list",
-        "text": "明细"
-      },
-      {
-        "pagePath": "pages/stats/stats",
-        "text": "统计"
-      },
-      {
-        "pagePath": "pages/mine/mine",
-        "text": "我的"
-      }
-    ]
   }
 }

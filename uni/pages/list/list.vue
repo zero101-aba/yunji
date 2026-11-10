@@ -135,6 +135,8 @@
       </view>
     </view>
   </view>
+
+  <x-tabbar :current="1" />
 </view>
 </template>
 
@@ -417,7 +419,7 @@ export default {
       });
     },
     goRecord() {
-      uni.switchTab({
+      uni.reLaunch({
         url: '/pages/record/record'
       });
     },
@@ -956,7 +958,7 @@ function cmpCategory(a, b, all) {
 .fab {
   position: fixed;
   right: 34rpx;
-  bottom: calc(40rpx + env(safe-area-inset-bottom));
+  bottom: calc(200rpx + env(safe-area-inset-bottom));
   width: 104rpx;
   height: 104rpx;
   border-radius: 50%;

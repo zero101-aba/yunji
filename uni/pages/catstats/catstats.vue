@@ -237,7 +237,7 @@ export default {
       });
     },
     goList() {
-      uni.switchTab({
+      uni.reLaunch({
         url: '/pages/list/list'
       });
     }

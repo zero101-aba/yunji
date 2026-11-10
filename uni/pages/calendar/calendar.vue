@@ -328,7 +328,7 @@ export default {
       });
     },
     goRecord() {
-      uni.switchTab({
+      uni.reLaunch({
         url: '/pages/record/record'
       });
     }
