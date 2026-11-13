@@ -111,7 +111,7 @@
       <view class="menu-icon" style="background: #E8F1FF">💳</view>
       <view class="menu-main">
         <text class="menu-title">支付后自动记账</text>
-        <text class="menu-sub">识别剪切板里的付款信息，回来提醒入账</text>
+        <text class="menu-sub">监听微信/支付宝支付通知与剪切板，自动记一笔</text>
       </view>
       <view :class="'toggle ' + (autoClipboard ? 'on' : '')" @tap.stop="toggleAutoClipboard">
         <view class="toggle-dot"></view>
@@ -258,6 +258,35 @@ export default {
       store.saveSettings({ autoClipboard: next });
       this.refresh();
       uni.showToast({ title: next ? '已开启自动记账' : '已关闭自动记账', icon: 'none' });
+      if (next) this.ensureNotifyPermission();
+    },
+    // 开启自动记账时检查通知使用权，未授权则引导去系统设置
+    ensureNotifyPermission() {
+      // #ifdef APP-PLUS
+      if (plus.os.name !== 'Android') return;
+      try {
+        const main = plus.android.runtimeMainActivity();
+        const Settings = plus.android.importClass('android.provider.Settings');
+        const context = main.getApplicationContext();
+        const enabled = Settings.Secure.getString(context.getContentResolver(), 'enabled_notification_listeners') || '';
+        if (enabled.indexOf(main.getPackageName()) >= 0) return;
+        uni.showModal({
+          title: '需要通知使用权',
+          content: '开启后才能读取微信/支付宝的支付通知并自动记一笔。请在下一步的列表中允许「星记」。',
+          confirmText: '去开启',
+          success: res => {
+            if (!res.confirm) return;
+            try {
+              const Intent = plus.android.importClass('android.content.Intent');
+              const intent = new Intent('android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS');
+              main.startActivity(intent);
+            } catch (e) {
+              uni.showToast({ title: '请到系统设置中开启通知使用权', icon: 'none' });
+            }
+          }
+        });
+      } catch (e) {}
+      // #endif
     },
     chooseDefaultPage() {
       uni.showActionSheet({

@@ -3,6 +3,83 @@ import store from './utils/store.js'
 import payment from './utils/payment.js'
 
 let clipboardTimer = null
+let notifyTimer = null
+let lastAuto = null
+
+// 读取原生通知监听服务写入的日志文件，读完即清空
+function readNotifyLines() {
+  // #ifdef APP-PLUS
+  try {
+    const main = plus.android.runtimeMainActivity()
+    const File = plus.android.importClass('java.io.File')
+    const FileInputStream = plus.android.importClass('java.io.FileInputStream')
+    const InputStreamReader = plus.android.importClass('java.io.InputStreamReader')
+    const BufferedReader = plus.android.importClass('java.io.BufferedReader')
+    const dir = main.getExternalFilesDir(null)
+    if (!dir) return []
+    const file = new File(dir, 'notify.log')
+    if (!file.exists()) return []
+    const reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), 'UTF-8'))
+    const lines = []
+    let line = reader.readLine()
+    while (line !== null && line !== undefined) {
+      lines.push(String(line))
+      line = reader.readLine()
+    }
+    reader.close()
+    file.delete()
+    return lines
+  } catch (e) {
+    return []
+  }
+  // #endif
+  return []
+}
+
+// 解析通知日志并自动入账
+function recordFromNotifications() {
+  let settings = {}
+  try {
+    settings = store.getSettings()
+  } catch (e) {
+    return
+  }
+  if (!settings.autoClipboard) return
+  const lines = readNotifyLines()
+  if (!lines.length) return
+  const accounts = store.getAccounts()
+  const account = accounts.find((a) => a.id === settings.lastAccountId) || accounts[0]
+  if (!account) return
+  let added = 0
+  lines.forEach((raw) => {
+    const parts = String(raw).split('\t')
+    const text = parts.slice(1).join(' ')
+    const parsed = payment.parsePaymentText(text)
+    if (!parsed) return
+    const now = Date.now()
+    if (
+      lastAuto &&
+      now - lastAuto.time < 120000 &&
+      lastAuto.amount === parsed.amount &&
+      lastAuto.note === parsed.note
+    ) {
+      return
+    }
+    const result = store.addBill({
+      type: parsed.type,
+      amount: parsed.amount,
+      categoryId: parsed.categoryId,
+      accountId: account.id,
+      note: parsed.note
+    })
+    if (!result.ok) return
+    lastAuto = { amount: parsed.amount, note: parsed.note, time: now }
+    added++
+  })
+  if (added > 0) {
+    uni.showToast({ title: '已自动记 ' + added + ' 笔', icon: 'none' })
+  }
+}
 
 // 用户授权后，回到前台时尝试从剪贴板识别刚发生的支付/收款
 function checkClipboard() {
@@ -21,29 +98,33 @@ function checkClipboard() {
       const parsed = payment.parsePaymentText(text)
       if (!parsed) return
       store.saveSettings({ clipboardSeen: text })
-      uni.showModal({
-        title: parsed.type === 'income' ? '检测到一笔收款' : '检测到一笔支付',
-        content: '金额 ¥' + (parsed.amount / 100).toFixed(2) + '，要记一笔吗？',
-        confirmText: '记一笔',
-        cancelText: '忽略',
-        confirmColor: '#00B578',
-        success(r) {
-          if (!r.confirm) return
-          let current = store.getSettings()
-          const accounts = store.getAccounts()
-          const account = accounts.find((a) => a.id === current.lastAccountId) || accounts[0]
-          const result = store.addBill({
-            type: parsed.type,
-            amount: parsed.amount,
-            categoryId: parsed.categoryId,
-            accountId: account ? account.id : '',
-            note: parsed.note
-          })
-          uni.showToast({
-            title: result.ok ? '已自动记账' : '记账失败',
-            icon: 'none'
-          })
-        }
+      const current = store.getSettings()
+      const accounts = store.getAccounts()
+      const account = accounts.find((a) => a.id === current.lastAccountId) || accounts[0]
+      if (!account) return
+      // 同一笔支付短时间内可能被重复识别，2 分钟内金额与备注相同则跳过
+      const now = Date.now()
+      if (
+        lastAuto &&
+        now - lastAuto.time < 120000 &&
+        lastAuto.amount === parsed.amount &&
+        lastAuto.note === parsed.note
+      ) {
+        return
+      }
+      const result = store.addBill({
+        type: parsed.type,
+        amount: parsed.amount,
+        categoryId: parsed.categoryId,
+        accountId: account.id,
+        note: parsed.note
+      })
+      if (!result.ok) return
+      lastAuto = { amount: parsed.amount, note: parsed.note, time: now }
+      uni.showToast({
+        title: (parsed.type === 'income' ? '已自动记收入 ¥' : '已自动记支出 ¥') + (parsed.amount / 100).toFixed(2),
+        icon: 'none',
+        duration: 2000
       })
     },
     fail() {}
@@ -67,11 +148,14 @@ export default {
       defaultPage: settings.defaultPage || 'record',
       justLaunched: true
     }
+    if (notifyTimer) clearInterval(notifyTimer)
+    notifyTimer = setInterval(recordFromNotifications, 20000)
   },
 
   onShow() {
     if (clipboardTimer) clearTimeout(clipboardTimer)
     clipboardTimer = setTimeout(checkClipboard, 800)
+    setTimeout(recordFromNotifications, 1500)
   },
 
   onError(err) {
